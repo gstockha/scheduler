@@ -1,26 +1,37 @@
 const $container = $(".container");
-const mTime = moment().format('MMMM Do YYYY');
+const $currentD = $("#currentDay");
+const mTime = moment().format('dddd, MMMM Do');
 let mHour = moment().hour();
 let timeList = [];
-// const startTime = 9;
-// const endTime = 17; //military time
-const startTime = 17;
-const endTime = 24; //military time
+let savedList = [];
+let loaded = false;
+const startTime = 9;
+const endTime = 17; //military time
+
+function loadList(){
+    savedList = JSON.parse(localStorage.getItem('list'));
+    console.log(savedList);
+    if (savedList != null) loaded = true;
+    else savedList = [];
+};
 
 function initApp(){
+    loadList();
+    $($currentD).append(mTime);
     let j = 0;
     let slot;
     for (let i = startTime; i < (endTime + 1); i++){
         timeList[j] = new timeSlot((j + startTime),"");
+        if (loaded && (savedList[j] != null)) timeList[j].desc = savedList[j];
         //#region make html
         $container.append("<div>");
         slot = $container.children('div')[j];
-        $(slot).addClass('time-block').addClass("row").append('<h4>').append('<p>').append('<button>');
-        $(slot).children('h4').addClass('hour').append(timeList[j].hourText.toString());
-        $(slot).children('p').attr("id",j).append(timeList[j].desc.toString());
-        $(slot).children('button').addClass('saveBtn');
+        $(slot).addClass('row time-block').append('<h4>').append('<textarea>').append('<button>');
+        $(slot).children('h4').addClass('col-1 hour').append(timeList[j].hourText.toString());
+        $(slot).children('textarea').addClass('col-9 description').append(timeList[j].desc.toString());
+        $(slot).children('button').addClass('col-1 saveBtn oi oi-clipboard mr-2').attr("id",j);
         //#endregion
-        timeList[j].setStatus(mHour,slot,'p');
+        timeList[j].setStatus(mHour,slot);
         j++;
     }
     //$container.children('div').addClass("time-block");
@@ -28,18 +39,18 @@ function initApp(){
 };
 
 class timeSlot{
-    constructor(hour,desc,status){
+    constructor(hour,desc){
         this.hour = hour;
         this.desc = desc;
-        this.desc = "Excepteur do consectetur enim qui incididunt nisi deserunt adipisicing voluptate. In laborum aliqua qui dolore."
         this.status = 'past'; //default
+        let suffix = "AM";
+        if (this.hour > 11) suffix = "PM";
         if (this.hour > 12){
-            this.hourText = (this.hour - 12).toString();
-            this.hourText += "PM";
+            this.hourText = ((this.hour - 12).toString() + suffix);
         }
-        else this.hourText = (this.hour.toString() + "PM");
+        else this.hourText = (this.hour.toString() + suffix);
     };
-    setStatus(mHour,htmlTarget,element){
+    setStatus(mHour,htmlTarget){
         if (this.hour < mHour){
             this.status = 'past';
         }
@@ -49,16 +60,17 @@ class timeSlot{
         else{
             this.status = 'present';
         }
-        $(htmlTarget).children(element).addClass(this.status);
+        $(htmlTarget).children("textarea").addClass(this.status);
     };
 };
 
-function editText(event){
+function saveList(event){
     let num = event.target.id;
-    num = $container.children('div')[num];
-    var text = $(num).children('p').val();
-    $(num).children('p').text("").append('<textarea>');
-    $(num).children('textarea').text(text);
+    let slot = $container.children('div')[num];
+    let text = $(slot).children('textarea').val();
+    savedList[num] = text;
+    console.log(text);
+    localStorage.setItem("list",JSON.stringify(savedList));
 }
 
 setInterval(()=>{ //refresh hour
@@ -70,4 +82,4 @@ setInterval(()=>{ //refresh hour
 
 initApp();
 
-$($container).on("click", "p", editText);
+$($container).on("click", "button", saveList);

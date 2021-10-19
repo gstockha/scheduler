@@ -1,46 +1,16 @@
-# 05 Third-Party APIs: Work Day Scheduler
+https://gotad.io/scheduler/
 
-Create a simple calendar application that allows the user to save events for each hour of the day. This app will run in the browser and feature dynamically updated HTML and CSS powered by jQuery.
+This assignment took me a while. The moment.js, time slot data structures, and color states were all pretty intuitive to form: 
 
-The starter code uses the [Moment.js](https://momentjs.com/) library to work with date and time, but you're free to use a different JavaScript solution to handle this functionality because Moment.js is considered a "legacy" product. Learn more about these other solutions in the [Moment.js project status page.](https://momentjs.com/docs/#/-project-status/).
+Create an array of date block objects via a class with a constructor.
 
-## User Story
+Get the moment() info, setting the header date and the retrieving the hour (military time) and setting an hour-checking interval to a minute.
 
-```
-AS AN employee with a busy schedule
-I WANT to add important events to a daily planner
-SO THAT I can manage my time effectively
-```
+The save/load functions were pretty simple; we're only saving the description of each date block.
 
-## Acceptance Criteria
-
-```
-GIVEN I am using a daily planner to create a schedule
-WHEN I open the planner
-THEN the current day is displayed at the top of the calendar
-WHEN I scroll down
-THEN I am presented with timeblocks for standard business hours
-WHEN I view the timeblocks for that day
-THEN each timeblock is color coded to indicate whether it is in the past, present, or future
-WHEN I click into a timeblock
-THEN I can enter an event
-WHEN I click the save button for that timeblock
-THEN the text for that event is saved in local storage
-WHEN I refresh the page
-THEN the saved events persist
-```
-
-The following animation demonstrates the application functionality:
-
-![Work Day Scheduler app with color-coded time slots shows a new event being typed in the 5PM slot.](./Assets/05-third-party-apis-homework-demo.gif)
-
-## Review
-
-You are required to submit the following for review:
-
-* The URL of the deployed application.
-
-* The URL of the GitHub repository. Give the repository a unique name and include a README describing the project.
-
----
-© 2021 Trilogy Education Services, LLC, a 2U, Inc. brand. Confidential and Proprietary. All Rights Reserved.
+What I was having trouble with, however, was calling and setting html elements and classes via JQuery. Retrieving target.id variables took me a while to remember how to do, and creating children on children elements seemed a bit clunky for my tastes. What was I doing wrong here? Do I really need to do this everytime?
+>slot = $container.children('div')[j];
+>$(slot).addClass('row time-block').append('<h4>').append('<textarea>').append('<button>');
+>$(slot).children('h4').addClass('col-1 hour').append(timeList[j].hourText.toString());
+>$(slot).children('textarea').addClass('col-9 description').append(timeList[j].desc.toString());
+>$(slot).children('button').addClass('col-1 saveBtn oi oi-clipboard mr-2').attr("id",j);
