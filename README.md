@@ -1,6 +1,7 @@
 https://gotad.io/scheduler/
 
-![hw4](https://user-images.githubusercontent.com/54012873/137846352-a2feed89-d6cb-4df8-a4e5-488e71e31af8.png)
+![scheduler](https://user-images.githubusercontent.com/54012873/138373327-75e86138-d530-46d1-bcd3-b8ccc86d8278.png)
+
 
 This assignment took me a while. The moment.js, time slot data structures, and color states were all pretty intuitive to form: 
 
